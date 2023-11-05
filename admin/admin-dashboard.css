@@ -62,7 +62,7 @@ a {
 /* Dropdown button on hover & focus */
 .dropbtn:hover, .dropbtn:focus {
   color: #ec7f6d;
-  font-weight: 700;
+  font-weight: 800;
   text-decoration: underline;
 }
 
@@ -70,6 +70,7 @@ a {
 .dropdown {
   position: relative;
   display: inline-block;
+  top: 0px;
   
 }
 
