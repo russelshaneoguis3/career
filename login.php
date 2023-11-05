@@ -4,7 +4,7 @@ include "connection.php";
 
 // Check if user is already logged in
 if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
-    header("Location: admin/dashboard.php");
+    header("Location: admin/admin-dashboard.php");
     exit();
 }
 
@@ -39,7 +39,7 @@ if (isset($_POST['uname']) && isset($_POST['password'])) {
                 session_set_cookie_params(0, '/');
                 session_regenerate_id(true);
 
-                header("Location: admin/dashboard.php");
+                header("Location: admin/admin-dashboard.php");
                 exit();
             }
         }

@@ -43,13 +43,6 @@ include("connection.php");
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 
 
-  <!-- =======================================================
-  * Template Name: Eterna
-  * Updated: Sep 18 2023 with Bootstrap v5.3.2
-  * Template URL: https://bootstrapmade.com/eterna-free-multipurpose-bootstrap-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
 </head>
 
 <body>
@@ -79,7 +72,7 @@ include("connection.php");
     <div class="container d-flex justify-content-between align-items-center">
 
       <div class="logo">
-        <a href="index.php"><img src="img/header-logo.png" alt="" class="img-fluid"></a>
+        <a href="index.php"><img src="img/header-logox.png" alt="" class="img-fluid"></a>
       </div>
 
       <nav id="navbar" class="navbar">
