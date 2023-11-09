@@ -13,13 +13,14 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
   <title>MSU-IIT National Multi-Purpose Cooperative &raquo; Home</title>
 
   <!-- Style/CSS -->
-  <link href="admin-dashboard.css" rel="stylesheet">
+  <link href="admin.css/admin-dashboard.css" rel="stylesheet">
+  <link href="admin.css/footer.css" rel="stylesheet">
 
   <!-- JQUERY -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <!-- JS functions -->
-  <script src="admin-dashboard.js"></script>
+  <script src="admin.js/admin-dashboard.js"></script>
 
    <!-- Favicons -->
    <link href="../img/logo.png" rel="icon">
@@ -81,6 +82,41 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
             </nav>
             <hr>
         </header>
+
+<!-- ======= Footer ======= -->
+<footer id="footer">
+
+<div class="footer-top">
+  <div class="container">
+    <div class="row">
+
+      <div class="col-lg-12 col-md-12 footer-links">
+        <h4>MSU-IIT NATIONAL MULTI-PURPOSE COOPERATIVE</h4>
+        <ul>
+        <p><span>Head Office:</span>  Gregorio T. Lluch Sr. Ave., Pala-o Iligan City, 9200, Philippines</p>
+        <p><span>Phone:</span> (063) 223-5874</p>
+        <p><span>Email:</span> <a href="mailto:msuiitnmpc@msuiitcoop.org?subject=Contact%20from%20MSU-IIT%20Coop%20website">msuiitnmpc@msuiitcoop.org</a></p>
+        <p><a href="https://hpqs-vnzw.accessdomain.com/webmail/" target="_blank">Webmail</a>, <a href="http://119.93.53.245/hrmax">HR Max</a>, <a target="_blank" href="https://docs.google.com/forms/d/1ZuszRLiLPY_-UroOgkmjZXs0sNpIVZPGJDuhxBmekwk/viewform">IT support desk</a>, <a href="https://sites.google.com/view/msuiitnmpcesurvey/home">e-Survey</a></p>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  </div>
+  <div class="credits">
+    <!-- All the links in the footer should remain intact. -->
+    <!-- You can delete the links only if you purchased the pro version. -->
+    <!-- Licensing information: https://bootstrapmade.com/license/ -->
+    <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/eterna-free-multipurpose-bootstrap-template/ -->
+    Designed by <a  href="https://bootstrapmade.com/" target="_blank">BootstrapMade</a>
+  </div>
+</div>
+</footer>
+
+<!-- End Footer -->
      
   </body>
 </html>
