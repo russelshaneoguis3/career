@@ -24,6 +24,8 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
+  <!-- Font Awesome Icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
   <!-- JQUERY -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -105,8 +107,9 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
 
 <?php
     // Fetch data from the 'branch' table
-    $query = "SELECT branch_id, CONCAT(branch_name, '<br>', location) as branch, CONCAT('tel no:  ', tel_no, '<br>', 'mobile no:  ', mobile_no) as contact FROM branch WHERE area = 1";
-    $result1 = mysqli_query($conn, $query);
+    $query1 = "SELECT branch_id, CONCAT(branch_name, '<br>', location) as branch, CONCAT('Tel no:  ', tel_no, '<br>', 'Mobile no:  ', mobile_no) as contact, name, COUNT(job_id) AS job_count FROM user, branch LEFT JOIN job ON branch_loc = branch_id WHERE area = 1 AND id = hr_assigned GROUP BY branch_id";
+    $result1 = mysqli_query($conn, $query1);
+
     ?>
 
     <div class="card" style="max-width: 80rem;">
@@ -114,13 +117,15 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
             <h5> Area 1 </h5>
         </div>
         <div class="card-body">
-            <blockquote class="blockquote mb-3">
+            <blockquote class="blockquote mb-4">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th scope="col">Branches</th>
-                            <th scope="col">Contact No.</th>
-                            <th scope="col">Action</th>
+                            <th scope="col" class="col-md-4">Branches</th>
+                            <th scope="col" class="col-md-3">Contact No.</th>
+                            <th scope="col" class="col-md-2">HR Assigned</th>
+                            <th scope="col" class="col-md-2">Available Jobs</th>
+                            <th scope="col" class="col-md-1">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -130,7 +135,14 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
                         echo '<tr>';
                         echo '<td>' . $row['branch'] . '</td>';
                         echo '<td>' . $row['contact'] . '</td>';
-                        echo '<td>' . $row['branch_id'] . '</td>'; 
+                        echo '<td>' . $row['name'] . '</td>'; 
+                        echo '<td>' . $row['job_count'], "  Available" . '</td>'; 
+                        echo '<td>';
+                        // Add an Edit button with a Bootstrap class
+                        echo '<a href="#" class="btn btn-success" onclick="editRow(' . $row['branch_id'] . ')"><i class="fa-solid fa-pen-to-square"></i></a>';
+                        // Add a Delete button with a Bootstrap class
+                        echo ' <a href="#" class="btn btn-danger" onclick="deleteRow(' . $row['branch_id'] . ')"><i class="fa-solid fa-trash-can"></i></a>';
+                        echo '</td>';    
                         echo '</tr>';
                     }
                     ?>
