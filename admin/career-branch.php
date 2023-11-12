@@ -1,9 +1,13 @@
 <?php 
 session_start();
 
+include("../connection.php");
+
 if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] === 'administrator') {
 ?>
+
 <!DOCTYPE html>
+
 <html>
   <head>
      <meta charset="utf-8">
@@ -13,9 +17,13 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
   <title>MSU-IIT National Multi-Purpose Cooperative &raquo; Home</title>
 
   <!-- Style/CSS -->
-  <link href="admin.css/admin-dashboard.css" rel="stylesheet">
-  <link href="admin.css/navbar.css" rel="stylesheet">
-  <link href="admin.css/footer.css" rel="stylesheet">
+  <link href="admin.css/career-branches.css" rel="stylesheet">
+
+  <!-- Bootstrap Style -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
 
   <!-- JQUERY -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -65,7 +73,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
                         <a href="admin-dashboard.php" class="nav-link">Branches</a>
                     </li>
                     <li class="nav-item">
-                        <a href="career-branch.php" class="nav-link">Careers</a>
+                        <a href="#" class="nav-link">Careers</a>
                     </li>
                     <li class="nav-item">
                         <a href="admin-dashboard.php" class="nav-link">FAQs</a>
@@ -81,22 +89,56 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
                     </div>
                 <!--Navigation-->
             </nav>
-            <hr>
         </header>
 
-<!-- Main body -->
+<!-- ======= Breadcrumbs ======= -->
+<section id="breadcrumbs" class="breadcrumbs">
+    <div class="container">
+        <h2>Choose Branch</h2>
 
-<center>
-<div class="dashboard-card card bg-dark text-white">
-  <img class="card-img" src="admin.pic/logo.png" alt="Card image">
-  <div class="card-img-overlay">
-    <h1 class="card-title">Sample Admin Dashboard</h1>
-    <br><hr><br>
-    <p class="card-text">This is sample admin dashboard and we will enhance this after we finish developing the subsytem that is assigned to us. Upon the successful completion of the assigned subsystem, we will try to enhance the user experience and functionality of the dashboard, incorporating advanced features and an aesthetically refined design. Thank you mga ulol</p>
-    
-  </div>
-</div>
-</center>
+        <ol>
+            <li><a href="admin-dashboard.php">Home</a></li>
+            <li>Branches</li>
+        </ol>
+    </div>
+</section><!-- End Breadcrumbs -->
+
+<?php
+    // Fetch data from the 'branch' table
+    $query = "SELECT branch_id, CONCAT(branch_name, '<br>', location) as branch, CONCAT('tel no:  ', tel_no, '<br>', 'mobile no:  ', mobile_no) as contact FROM branch WHERE area = 1";
+    $result1 = mysqli_query($conn, $query);
+    ?>
+
+    <div class="card" style="max-width: 80rem;">
+        <div class="card-header" style="background-color: #4775d1; color: #fff;">
+            <h5> Area 1 </h5>
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-3">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Branches</th>
+                            <th scope="col">Contact No.</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    // Loop through the data and display each row in the table
+                    while ($row = mysqli_fetch_assoc($result1)) {
+                        echo '<tr>';
+                        echo '<td>' . $row['branch'] . '</td>';
+                        echo '<td>' . $row['contact'] . '</td>';
+                        echo '<td>' . $row['branch_id'] . '</td>'; 
+                        echo '</tr>';
+                    }
+                    ?>
+                    </tbody>
+                </table>
+            </blockquote>
+        </div>
+    </div>
 
 <!-- ======= Footer ======= -->
 <footer id="footer">

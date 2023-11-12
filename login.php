@@ -2,9 +2,15 @@
 session_start();
 include "connection.php";
 
-// Check if user is already logged in
 if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
-    header("Location: admin/admin-dashboard.php");
+    // Redirect to the admin dashboard or any other appropriate page based on the user's role
+    if ($_SESSION['role'] === 'administrator') {
+        header("Location: admin/admin-dashboard.php");
+    } 
+    if ($_SESSION['role'] === 'HR') {
+        // Redirect to hr's page
+        header("Location: hr/hr-dashboard.php");
+    }
     exit();
 }
 
@@ -12,16 +18,12 @@ if (isset($_POST['uname']) && isset($_POST['password'])) {
     $uname = mysqli_real_escape_string($conn, $_POST['uname']);
     $pass = mysqli_real_escape_string($conn, $_POST['password']);
 
-    if (empty($uname)) 
-    {
-        $_SESSION['fill'] = "Please fill username!";
-
+    if (empty($uname)) {
+        $_SESSION['fill'] = "Please fill in the username!";
         header("Location: {$_SERVER['PHP_SELF']}");
         exit();
     } else if (empty($pass)) {
-
-        $_SESSION['fillpass'] = "Please fill password!";
-
+        $_SESSION['fillpass'] = "Please fill in the password!";
         header("Location: {$_SERVER['PHP_SELF']}");
         exit();
     } else {
@@ -34,18 +36,30 @@ if (isset($_POST['uname']) && isset($_POST['password'])) {
                 $_SESSION['username'] = $row['username'];
                 $_SESSION['name'] = $row['name'];
                 $_SESSION['id'] = $row['id'];
+                $_SESSION['role'] = $row['role'];
 
                 // Set session cookie to be accessible across all tabs
                 session_set_cookie_params(0, '/');
                 session_regenerate_id(true);
 
-                header("Location: admin/admin-dashboard.php");
+                // Prevent caching
+                header("Cache-Control: no-cache, no-store, must-revalidate");
+                header("Pragma: no-cache");
+                header("Expires: 0");
+
+                // Redirect based on the user's role
+                if ($_SESSION['role'] === 'administrator') {
+                    header("Location: admin/admin-dashboard.php");
+                } 
+                if ($_SESSION['role'] === 'HR') {
+                    // Redirect to another page for hr users if needed
+                    header("Location: hr/hr-dashboard.php");
+                }
                 exit();
             }
         }
 
         $_SESSION['wrongC'] = "Wrong user credentials!";
-
         header("Location: {$_SERVER['PHP_SELF']}");
         exit();
     }
@@ -54,6 +68,7 @@ if (isset($_POST['uname']) && isset($_POST['password'])) {
     unset($_SESSION['error']);
 }
 ?>
+
 
 <!DOCTYPE html>
 <html>
@@ -64,7 +79,7 @@ if (isset($_POST['uname']) && isset($_POST['password'])) {
     <link href="img/logo.png" rel="icon">
     <link href="img/logo.png" rel="apple-touch-icon">
     
-    <link rel="stylesheet" type="text/css" href="dashboard.css/login-style.css">
+    <link rel="stylesheet" type="text/css" href="landingpage.css/login-style.css">
 
     <!-- Font Awesome Icon -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />

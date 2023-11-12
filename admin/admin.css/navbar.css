@@ -1,0 +1,185 @@
+.navbar {
+  max-width: 1248px;
+  padding: 10px 0px;
+  margin-left: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 60px;
+  color: #ffff;
+}
+.navbar h1 a,
+.navbar ul li a {
+  color: #545454;
+
+}
+.navbar ul {
+  display: flex;
+}
+.navbar ul li a {
+  padding: 0 10px;
+  transition: all 0.2s ease-in-out;
+}
+.navbar ul li a:hover,
+.navbar ul li a:focus {
+  color: #ec7f6d;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* Dropdown Button */
+.dropbtn {
+  color: #545454;
+  border: none;
+  cursor: pointer;
+}
+
+/* Dropdown button on hover & focus */
+.dropbtn:hover, .dropbtn:focus {
+  color: #ec7f6d;
+  font-weight: 800;
+  text-decoration: underline;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  top: 0px;
+  
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 135px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 16px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+  color: #ec7f6d;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}
+
+
+/* Hamburger Menu*/
+#navcheck,
+.nav-btn,
+.backdrop {
+  display: none;
+}
+.nav-btn {
+  position: fixed;
+  right: 24px;
+  top: 26px;
+  z-index: 99;
+  color: #545454;
+}
+.nav-btn label span {
+  display: block;
+  width: 30px;
+  height: 1.5px;
+  background: #545454;
+  border-radius: 3px;
+  transition: background-color 0.3s cubic-bezier(0.77, 0.2, 0.05, 1), opacity 0.3s ease-in-out,
+      -webkit-transform 0.3s cubic-bezier(0.77, 0.2, 0.05, 1);
+
+  -webkit-transition: background-color 0.3s cubic-bezier(0.77, 0.2, 0.05, 1), opacity 0.3s ease-in-out,
+      -webkit-transform 0.3s cubic-bezier(0.77, 0.2, 0.05, 1);
+
+  transition: transform 0.3s cubic-bezier(0.77, 0.2, 0.05, 1), background-color 0.3s cubic-bezier(0.77, 0.2, 0.05, 1),
+      opacity 0.3s ease-in-out;
+
+  transition: transform 0.3s cubic-bezier(0.77, 0.2, 0.05, 1), background-color 0.3s cubic-bezier(0.77, 0.2, 0.05, 1),
+
+      opacity 0.3s ease-in-out, -webkit-transform 0.3s cubic-bezier(0.77, 0.2, 0.05, 1);
+  position: relative;
+}
+.nav-btn label span:not(:last-child) {
+  margin-bottom: 7px;
+}
+
+@media (max-width: 1280px) {
+
+  .navbar .dropdown {
+    margin-right:80px;
+    font-size: 17px;
+    top: -6px;
+  }
+  
+  .nav-menu {
+      display: none !important;
+  }
+
+  .nav-btn {
+      display: block;
+  }
+  .navbar ul li a {
+      color: #303030;
+      width: 100%;
+      display: block;
+      padding: 16px;
+      font-size: 20px;
+  }
+  #navcheck {
+      opacity: 0;
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 72px;
+      height: 72px;
+      z-index: 999;
+      cursor: pointer;
+      margin: 0;
+      display: block;
+  }
+  input#navcheck:checked ~ .nav-btn label span:first-child {
+      -webkit-transform: rotate(45deg) translate(6px, 6px);
+      transform: rotate(45deg) translate(6px, 6px);
+      top: 0;
+      left: 0;
+  }
+  input#navcheck:checked ~ .nav-btn label span:last-child {
+      -webkit-transform: rotate(-45deg) translate(6px, -6px);
+      transform: rotate(-45deg) translate(6px, -6px);
+      top: 0;
+      left: 0;
+  }
+  input#navcheck:checked ~ .nav-btn label span:nth-child(2) {
+      opacity: 0;
+  }
+  input#navcheck:checked ~ .header .navbar .nav-menu {
+      display: block !important;
+      position: absolute;
+      top: 72px;
+      left: 0;
+      right: 0;
+      background-color: #fff;
+  }
+  input#navcheck:checked ~ .backdrop {
+      position: absolute;
+      display: block;
+      background-color: rgba(0, 0, 0, 0.36);
+      width: 100%;
+      height: calc(100% - 72px);
+      z-index: 1;
+  }
+}
+

@@ -26,15 +26,15 @@ include("connection.php");
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-  <link href="dashboard.css/animate.min.css" rel="stylesheet">
-  <link href="dashboard.css/bootstrap.min.css" rel="stylesheet">
-  <link href="dashboard.css/bootstrap-icons.css" rel="stylesheet">
-  <link href="dashboard.css/boxicons.min.css" rel="stylesheet">
-  <link href="dashboard.css/glightbox.min.css" rel="stylesheet">
-  <link href="dashboard.css/swiper-bundle.min.css" rel="stylesheet">
+  <link href="landingpage.css/animate.min.css" rel="stylesheet">
+  <link href="landingpage.css/bootstrap.min.css" rel="stylesheet">
+  <link href="landingpage.css/bootstrap-icons.css" rel="stylesheet">
+  <link href="landingpage.css/boxicons.min.css" rel="stylesheet">
+  <link href="landingpage.css/glightbox.min.css" rel="stylesheet">
+  <link href="landingpage.css/swiper-bundle.min.css" rel="stylesheet">
 
   <!-- Template Main CSS File -->
-  <link href="dashboard.css/style.css" rel="stylesheet">
+  <link href="landingpage.css/style.css" rel="stylesheet">
 
   <!-- Font Awesome Icon -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
