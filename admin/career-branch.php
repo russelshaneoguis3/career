@@ -8,7 +8,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
     if (isset($_GET['deleteBranch'])) {
         $deleteB = $_GET['deleteBranch'];
     
-        // Check if $deleteB is a valid integer
+// Check if $deleteB is a valid integer (Delete Branch)
         if (filter_var($deleteB, FILTER_VALIDATE_INT)) {
             $deleteB_que = "DELETE FROM branch WHERE branch_id = $deleteB";
             $deleteB_que_result = mysqli_query($conn, $deleteB_que);
@@ -26,7 +26,38 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
             echo "Invalid branch ID";
         }
     }
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Retrieve data from the form
+        $branchId = $_POST['branch_id'];
+        $branchName = $_POST['branch_name'];
+        $location = $_POST['location'];
+        $mobileNo = $_POST['mobile_no'];
+        $telNo = $_POST['tel_no'];
+        $hrAssigned = $_POST['hr_assigned'];
     
+// Perform the update in the database branch table
+        $updateQuery = "UPDATE branch SET
+                        branch_name = '$branchName',
+                        location = '$location',
+                        mobile_no = '$mobileNo',
+                        tel_no = '$telNo',
+                        hr_assigned = '$hrAssigned'
+                        WHERE branch_id = $branchId";
+    
+    if (mysqli_query($conn, $updateQuery)) {
+
+    // Script to show Bootstrap modal after successful update
+     // Redirect to the same page after setting the session variable
+     header("Location: career-branch.php?editSuccess=true");
+     exit();
+
+    } else {
+        // Handle query execution error
+        echo "Error updating branch: " . mysqli_error($conn);
+    }
+}
+
 ?>
 
     <!DOCTYPE html>
@@ -42,22 +73,23 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
     <!-- Style/CSS -->
     <link href="admin.css/career-branches.css" rel="stylesheet">
 
-    <!-- Bootstrap Style -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<!-- Bootstrap Style -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<!-- JQUERY -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- Font Awesome Icon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
-    <!-- JQUERY -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Sweet Alert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-    <!-- Sweet Alert -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<!-- Your custom scripts -->
+<script src="admin.js/admin-dashboard.js"></script>
 
-    <!-- JS functions -->
-    <script src="admin.js/admin-dashboard.js"></script>
+<!-- Font Awesome Icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
     <!-- Favicons -->
     <link href="admin.pic/logo.png" rel="icon">
@@ -129,21 +161,49 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
                 <li>Branches</li>
             </ol>
         </div>
-    </section><!-- End Breadcrumbs -->
+    </section>
+    
+    <!-- End Breadcrumbs -->
 
     <?php
-        // Fetch data from the 'branch' table
-        $query1 = "SELECT branch_id, CONCAT('<b>',branch_name,'</b>', '<br>', location) as branch, 
-                CONCAT('<b>','Tel no:  ','</b>', tel_no,'<br>','<b>','Mobile no:  ' , '</b>', mobile_no) as contact, name, 
-                COUNT(job_id) AS job_count FROM user, branch LEFT JOIN job ON branch_loc = branch_id WHERE area = 1 AND id = hr_assigned GROUP BY branch_id";
 
-        $result1 = mysqli_query($conn, $query1);
+        // Fetch data from the 'branch' area 1
+            $query1 = "SELECT branch_id, CONCAT('<b>',branch_name,'</b>', '<br>', location) as branch, 
+
+            branch_name, location, mobile_no, tel_no, hr_assigned,
+
+            CONCAT('<b>','Tel no:  ','</b>', tel_no,'<br>','<b>','Mobile no:  ' , '</b>', mobile_no) as contact, name, 
+            COUNT(job_id) AS job_count FROM user, branch LEFT JOIN job ON branch_loc = branch_id WHERE area = 1 AND id = hr_assigned GROUP BY branch_id";
+
+            $result1 = mysqli_query($conn, $query1);
+
+        // Fetch data from the 'branch' area 2 
+            $query2 = "SELECT branch_id, CONCAT('<b>',branch_name,'</b>', '<br>', location) as branch, 
+
+            branch_name, location, mobile_no, tel_no, hr_assigned,
+
+            CONCAT('<b>','Tel no:  ','</b>', tel_no,'<br>','<b>','Mobile no:  ' , '</b>', mobile_no) as contact, name, 
+            COUNT(job_id) AS job_count FROM user, branch LEFT JOIN job ON branch_loc = branch_id WHERE area = 2 AND id = hr_assigned GROUP BY branch_id";
+    
+            $result2 = mysqli_query($conn, $query2);
+
+
+            // Fetch data from the 'branch' area 3
+            $query3 = "SELECT branch_id, CONCAT('<b>',branch_name,'</b>', '<br>', location) as branch, 
+    
+            branch_name, location, mobile_no, tel_no, hr_assigned,
+        
+            CONCAT('<b>','Tel no:  ','</b>', tel_no,'<br>','<b>','Mobile no:  ' , '</b>', mobile_no) as contact, name, 
+            COUNT(job_id) AS job_count FROM user, branch LEFT JOIN job ON branch_loc = branch_id WHERE area = 3 AND id = hr_assigned GROUP BY branch_id";
+        
+            $result3 = mysqli_query($conn, $query3);
 
         ?>
 
+<!-- Table 1/ Area 1 -->
         <div class="card" style="max-width: 80rem;">
             <div class="card-header" style="background-color: #4775d1; color: #fff;">
-                <h5> Area 1 </h5>
+            <h4> Area 1  <a href="add-branch.php" class="btn btn-success" style="float: right" onclick="showAddBranchModal()"> <i class="fa-solid fa-location-dot"></i> Add Branch</a></h4> 
             </div>
             <div class="card-body">
                 <blockquote class="blockquote mb-4">
@@ -168,9 +228,10 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
                             echo '<td>' .'<b>',$row['job_count'],'</b>', "  Available" . '</td>'; 
                             echo '<td>';
                             // Add an Edit button with a Bootstrap class
-                            echo '<a href="#" class="btn btn-success" onclick="editRow(' . $row['branch_id'] . ')"><i class="fa-solid fa-pen-to-square"></i></a>';
+                            echo '<a href="#" class="btn btn-outline-primary" onclick="editBranch(' . $row['branch_id'] . ', \'' . $row['branch_name'] . '\', \'' . $row['location'] . '\', \'' . $row['mobile_no'] . '\', \'' . $row['tel_no'] . '\', \'' . $row['hr_assigned'] . '\')"><i class="fa-solid fa-pen-to-square"></i></a>';
+
                             // Add a Delete button with a Bootstrap class
-                            echo ' <a href="#" class="btn btn-danger" onclick="deleteBranch(' . $row['branch_id'] . ')"><i class="fa-solid fa-trash-can"></i></a>';
+                            echo ' <a href="#" class="btn btn-outline-danger" onclick="deleteBranch(' . $row['branch_id'] . ')"><i class="fa-solid fa-trash-can"></i></a>';
 
                             echo '</td>';    
                             echo '</tr>';
@@ -182,7 +243,151 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
             </div>
         </div>
 
-    <!-- ======= Footer ======= -->
+<!-- Table 2 / Area 2 -->
+
+<div class="card" style="max-width: 80rem;">
+            <div class="card-header" style="background-color: #4775d1; color: #fff;">
+            <h4> Area 2  <a href="add-branch.php" class="btn btn-success" style="float: right" onclick="showAddBranchModal()"> <i class="fa-solid fa-location-dot"></i> Add Branch</a></h4> 
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-4">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="col-md-4">Branches</th>
+                                <th scope="col" class="col-md-3">Contact No.</th>
+                                <th scope="col" class="col-md-2">HR Assigned</th>
+                                <th scope="col" class="col-md-2">Available Jobs</th>
+                                <th scope="col" class="col-md-1">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        // Loop through the data and display each row in the table
+                        while ($row = mysqli_fetch_assoc($result2)) {
+                            echo '<tr>';
+                            echo '<td>' . $row['branch'] . '</td>';
+                            echo '<td>' . $row['contact'] . '</td>';
+                            echo '<td>' . $row['name'] . '</td>'; 
+                            echo '<td>' .'<b>',$row['job_count'],'</b>', "  Available" . '</td>'; 
+                            echo '<td>';
+                            // Add an Edit button with a Bootstrap class
+                            echo '<a href="#" class="btn btn-outline-primary" onclick="editBranch(' . $row['branch_id'] . ', \'' . $row['branch_name'] . '\', \'' . $row['location'] . '\', \'' . $row['mobile_no'] . '\', \'' . $row['tel_no'] . '\', \'' . $row['hr_assigned'] . '\')"><i class="fa-solid fa-pen-to-square"></i></a>';
+
+                            // Add a Delete button with a Bootstrap class
+                            echo ' <a href="#" class="btn btn-outline-danger" onclick="deleteBranch(' . $row['branch_id'] . ')"><i class="fa-solid fa-trash-can"></i></a>';
+
+                            echo '</td>';    
+                            echo '</tr>';
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+                </blockquote>
+            </div>
+        </div>
+
+<!-- Table 3 / Area 3 -->
+
+<div class="card" style="max-width: 80rem;">
+            <div class="card-header" style="background-color: #4775d1; color: #fff;">
+            <h4> Area 3  <a href="add-branch.php" class="btn btn-success" style="float: right" onclick="showAddBranchModal()"> <i class="fa-solid fa-location-dot"></i> Add Branch</a></h4> 
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-4">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="col-md-4">Branches</th>
+                                <th scope="col" class="col-md-3">Contact No.</th>
+                                <th scope="col" class="col-md-2">HR Assigned</th>
+                                <th scope="col" class="col-md-2">Available Jobs</th>
+                                <th scope="col" class="col-md-1">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        // Loop through the data and display each row in the table
+                        while ($row = mysqli_fetch_assoc($result3)) {
+                            echo '<tr>';
+                            echo '<td>' . $row['branch'] . '</td>';
+                            echo '<td>' . $row['contact'] . '</td>';
+                            echo '<td>' . $row['name'] . '</td>'; 
+                            echo '<td>' .'<b>',$row['job_count'],'</b>', "  Available" . '</td>'; 
+                            echo '<td>';
+                            // Add an Edit button with a Bootstrap class
+                            echo '<a href="#" class="btn btn-outline-primary" onclick="editBranch(' . $row['branch_id'] . ', \'' . $row['branch_name'] . '\', \'' . $row['location'] . '\', \'' . $row['mobile_no'] . '\', \'' . $row['tel_no'] . '\', \'' . $row['hr_assigned'] . '\')"><i class="fa-solid fa-pen-to-square"></i></a>';
+
+                            // Add a Delete button with a Bootstrap class
+                            echo ' <a href="#" class="btn btn-outline-danger" onclick="deleteBranch(' . $row['branch_id'] . ')"><i class="fa-solid fa-trash-can"></i></a>';
+
+                            echo '</td>';    
+                            echo '</tr>';
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+                </blockquote>
+            </div>
+        </div>
+
+
+<!-- Update/Edit Branch Modal -->
+<div id="editBranchModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style= "background-color: #66ccff; color: #fff;">
+                <h5 class="modal-title">Edit Branch</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body" style="background-color: #f5f5ef;">
+                <!-- Form for Editing Branch -->
+                <form action="" method="post">
+                    <input type="hidden" id="editBranchId" name="branch_id">
+                    <div class="form-group">
+                        <label for="editBranchName"><b>Branch Name</b></label>
+                        <input type="text" class="form-control" id="editBranchName" name="branch_name" required>
+                    </div><br>
+                    <div class="form-group">
+                        <label for="editLocation"><b>Location</b></label>
+                        <input type="text" class="form-control" id="editLocation" name="location" required>
+                    </div><br>
+                    <div class="form-group">
+                        <label for="editTelNo"><b>Telephone Number </b>(separate with ' ; ' if multiple)</label>
+                        <input type="text" class="form-control" id="editTelNo" name="tel_no" required>
+                    </div><br>
+                    <div class="form-group">
+                        <label for="editMobileNo"><b>Mobile Number</b> (separate with ' ; ' if multiple)</label>
+                        <input type="text" class="form-control" id="editMobileNo" name="mobile_no" required>
+                    </div><br>
+                    <div class="form-group">
+                        <label for="editHrAssigned"><b>HR Assigned</b> (HR ID)</label>
+                        <input type="text" class="form-control" id="editHrAssigned" name="hr_assigned" required>
+                    </div><br>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> 
+
+<!-- Edit Success Modal -->
+<div id="editBranchSuccessModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #66ccff; color: #fff;">
+                <h5 class="modal-title">Update Successful</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="background-color: #f5f5ef;">
+                <p>The branch information has been updated successfully.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ======= Footer ======= -->
     <footer id="footer">
 
     <div class="footer-top">
@@ -217,7 +422,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
 
     <!-- End Footer -->
 
-    <script>
+<script>
     function deleteBranch(branchId) {
         // Trigger SweetAlert confirmation
         Swal.fire({
@@ -235,11 +440,28 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
             }
         });
     }
+
 </script>
 
-        
-    </body>
-    </html>
+<script>
+    function editBranch(branchId, branchName, location, mobileNo, telNo, hrAssigned) {
+        console.log(branchId, branchName, location, mobileNo, telNo, hrAssigned);
+
+        // Set values in the modal form
+        document.getElementById('editBranchId').value = branchId;
+        document.getElementById('editBranchName').value = branchName;
+        document.getElementById('editLocation').value = location;
+        document.getElementById('editMobileNo').value = mobileNo;
+        document.getElementById('editTelNo').value = telNo;
+        document.getElementById('editHrAssigned').value = hrAssigned;
+
+        // Show the modal
+        $('#editBranchModal').modal('show');
+    }
+    
+</script>
+
+</body>
 
     <?php 
     } else {
@@ -247,3 +469,16 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
         exit();
     }
     ?>
+</html>
+
+<?php
+
+// Check if the editSuccess parameter is present in the URL
+if (isset($_GET['editSuccess']) && $_GET['editSuccess'] === 'true') {
+    echo '<script>
+        $(document).ready(function(){
+            $("#editBranchSuccessModal").modal("show");
+        });
+    </script>';
+}
+?>
