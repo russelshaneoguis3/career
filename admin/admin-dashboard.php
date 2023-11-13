@@ -73,7 +73,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
                     </ul>
                     <!-- dropdown for logout -->
                       <div class="dropdown">
-                      <b><a onclick="myFunction()" class="dropbtn"><u><?php echo $_SESSION['name']; ?>▼</u></a></b>
+                      <b><a onclick="myFunction()" class="dropbtn"><?php echo $_SESSION['name']; ?>▼</a></b>
                       <div id="myDropdown" class="dropdown-content">
                       <a href="../logout.php">Logout</a>
   
