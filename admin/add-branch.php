@@ -5,29 +5,33 @@ include("../connection.php");
 
 if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] === 'administrator') {
 
-
-    //Add Branches
+    // Add Branches
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Retrieve data from the form
+        // Prepare and bind the SQL statement with placeholders
+        $insertQuery = "INSERT INTO branch (area, branch_name, location, mobile_no, tel_no, hr_assigned)
+                        VALUES (?, ?, ?, ?, ?, ?)";
+
+        $stmt = $conn->prepare($insertQuery);
+        $stmt->bind_param("isssss", $area, $branchName, $location, $mobileNo, $telNo, $hrAssigned);
+
+        // Set the parameter values
         $area = $_POST['area'];
         $branchName = $_POST['branch_name'];
         $location = $_POST['location'];
         $mobileNo = $_POST['mobile_no'];
         $telNo = $_POST['tel_no'];
         $hrAssigned = $_POST['hr_assigned'];
-    
-        // Perform the insertion into the database branch table
-        $insertQuery = "INSERT INTO branch (area, branch_name, location, mobile_no, tel_no, hr_assigned)
-                        VALUES ('$area', '$branchName', '$location', '$mobileNo', '$telNo', '$hrAssigned')";
-    
-        if (mysqli_query($conn, $insertQuery)) {
 
+        // Execute the statement
+        if ($stmt->execute()) {
             $_SESSION['addBranchSuccess'] = true;
-
         } else {
             // Handle query execution error
-            echo "Error adding branch: " . mysqli_error($conn);
+            echo "Error adding branch: " . $stmt->error;
         }
+
+        // Close the statement
+        $stmt->close();
     }
     
 ?>
@@ -126,7 +130,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
     <!-- ======= Breadcrumbs ======= -->
     <section id="breadcrumbs" class="breadcrumbs">
         <div class="container">
-            <h2>Branch List</h2>
+            <h2>Add Branch to the List</h2>
 
             <ol>
                 <li><a href="career-branch.php">Branch List</a></li>
@@ -145,7 +149,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
             <div class="col-md-6">
                 <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                     <div class="mb-3">
-                        <label for="areaLeft" class="form-label">Area</label>
+                        <label for="areaLeft" class="form-label"><b>Area</b></label>
                         <select class="form-select" id="areaLeft" name="area">
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -153,12 +157,12 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="branchNameLeft" class="form-label">Branch Name</label>
-                        <input type="text" class="form-control" id="branchNameLeft" name="branch_name" placeholder="Branch Name">
+                        <label for="branchNameLeft" class="form-label"><b>Branch Name</b></label>
+                        <input type="text" class="form-control" id="branchNameLeft" name="branch_name" placeholder="Branch Name" required>
                     </div>
                     <div class="mb-3">
-                        <label for="locationLeft" class="form-label">Location</label>
-                        <input type="text" class="form-control" id="locationLeft" name="location" placeholder="Location">
+                        <label for="locationLeft" class="form-label"><b>Location</b></label>
+                        <input type="text" class="form-control" id="locationLeft" name="location" placeholder="Location" required>
                     </div>
 
                
@@ -167,16 +171,16 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
             <!-- Right Column - Forms on the Right -->
             <div class="col-md-6">
             <div class="mb-3">
-                        <label for="mobileNoLeft" class="form-label">Mobile No</label>
-                        <input type="text" class="form-control" id="mobileNoLeft" name="mobile_no" placeholder="Mobile No">
+                        <label for="mobileNoLeft" class="form-label"><b>Mobile No</b> (Separate with ' ; ' if multiple)</label>
+                        <input type="text" class="form-control" id="mobileNoLeft" name="mobile_no" placeholder="Mobile No" required>
                     </div>
                     <div class="mb-3">
-                        <label for="telNoLeft" class="form-label">Tel No</label>
-                        <input type="text" class="form-control" id="telNoLeft" name="tel_no" placeholder="Tel No">
+                        <label for="telNoLeft" class="form-label"><b>Tel No</b> (Separate with ' ; ' if multiple) </label>
+                        <input type="text" class="form-control" id="telNoLeft" name="tel_no" placeholder="Tel No" required>
                     </div>
                     <div class="mb-3">
-                        <label for="hrAssignedLeft" class="form-label">HR Assigned</label>
-                        <input type="text" class="form-control" id="hrAssignedLeft" name="hr_assigned" placeholder="HR Assigned">
+                        <label for="hrAssignedLeft" class="form-label"><b>HR Assigned</b> (HR ID)</label>
+                        <input type="text" class="form-control" id="hrAssignedLeft" name="hr_assigned" placeholder="HR Assigned" required>
                     </div>
             </div>
         </div>

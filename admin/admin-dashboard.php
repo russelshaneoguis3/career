@@ -17,6 +17,8 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
   <link href="admin.css/navbar.css" rel="stylesheet">
   <link href="admin.css/footer.css" rel="stylesheet">
 
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap">
+
   <!-- JQUERY -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -24,8 +26,8 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
   <script src="admin.js/admin-dashboard.js"></script>
 
    <!-- Favicons -->
-   <link href="admin.pic/logo.png" rel="icon">
-  <link href="admin.pic/logo.png" rel="apple-touch-icon">
+   <link href="admin.pic/nmpc-logo.png" rel="icon">
+  <link href="admin.pic/nmpc-logo.png" rel="apple-touch-icon">
 
   </head>
   <body>

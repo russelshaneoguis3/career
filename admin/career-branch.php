@@ -36,26 +36,39 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
         $telNo = $_POST['tel_no'];
         $hrAssigned = $_POST['hr_assigned'];
     
-// Perform the update in the database branch table
+        // Perform the update in the database branch table with prepared statement
         $updateQuery = "UPDATE branch SET
-                        branch_name = '$branchName',
-                        location = '$location',
-                        mobile_no = '$mobileNo',
-                        tel_no = '$telNo',
-                        hr_assigned = '$hrAssigned'
-                        WHERE branch_id = $branchId";
-    
-    if (mysqli_query($conn, $updateQuery)) {
+        branch_name = ?,
+        location = ?,
+        mobile_no = ?,
+        tel_no = ?,
+        hr_assigned = ?
+        WHERE branch_id = ?";
 
-    // Script to show Bootstrap modal after successful update
-     // Redirect to the same page after setting the session variable
-     header("Location: career-branch.php?editSuccess=true");
-     exit();
+        // Prepare the statement
+        $stmt = mysqli_prepare($conn, $updateQuery);
 
-    } else {
+        // Bind parameters
+        mysqli_stmt_bind_param($stmt, "sssssi", $branchName, $location, $mobileNo, $telNo, $hrAssigned, $branchId);
+
+        // Execute the statement
+        if (mysqli_stmt_execute($stmt)) {
+        // Script to show Bootstrap modal after successful update
+        // Redirect to the same page after setting the session variable
+        header("Location: career-branch.php?editSuccess=true");
+        exit();
+        } else {
         // Handle query execution error
         echo "Error updating branch: " . mysqli_error($conn);
+        }
+
+        // Close the statement
+        mysqli_stmt_close($stmt);
+
     }
+// Function to escape single quotes
+function escapeSingleQuotes($string) {
+    return str_replace("'", "\\'", $string);
 }
 
 ?>
@@ -205,9 +218,9 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
             <div class="card-header" style="background-color: #4775d1; color: #fff;">
             <h4> Area 1  <a href="add-branch.php" class="btn btn-success" style="float: right" onclick="showAddBranchModal()"> <i class="fa-solid fa-location-dot"></i> Add Branch</a></h4> 
             </div>
-            <div class="card-body">
+            <div class="card-body" style="background-color: #CFE2FF">
                 <blockquote class="blockquote mb-4">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-primary">
                         <thead>
                             <tr>
                                 <th scope="col" class="col-md-4">Branches</th>
@@ -228,7 +241,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
                             echo '<td>' .'<b>',$row['job_count'],'</b>', "  Available" . '</td>'; 
                             echo '<td>';
                             // Add an Edit button with a Bootstrap class
-                            echo '<a href="#" class="btn btn-outline-primary" onclick="editBranch(' . $row['branch_id'] . ', \'' . $row['branch_name'] . '\', \'' . $row['location'] . '\', \'' . $row['mobile_no'] . '\', \'' . $row['tel_no'] . '\', \'' . $row['hr_assigned'] . '\')"><i class="fa-solid fa-pen-to-square"></i></a>';
+                            echo '<a href="#" class="btn btn-outline-primary" onclick="editBranch(' . $row['branch_id'] . ', \'' . escapeSingleQuotes($row['branch_name']) . '\', \'' . escapeSingleQuotes($row['location']) . '\', \'' . escapeSingleQuotes($row['mobile_no']) . '\', \'' . escapeSingleQuotes($row['tel_no']) . '\', \'' . escapeSingleQuotes($row['hr_assigned']) . '\')"><i class="fa-solid fa-pen-to-square"></i></a>';
 
                             // Add a Delete button with a Bootstrap class
                             echo ' <a href="#" class="btn btn-outline-danger" onclick="deleteBranch(' . $row['branch_id'] . ')"><i class="fa-solid fa-trash-can"></i></a>';
@@ -249,9 +262,9 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
             <div class="card-header" style="background-color: #4775d1; color: #fff;">
             <h4> Area 2  <a href="add-branch.php" class="btn btn-success" style="float: right" onclick="showAddBranchModal()"> <i class="fa-solid fa-location-dot"></i> Add Branch</a></h4> 
             </div>
-            <div class="card-body">
+            <div class="card-body" style="background-color: #CFE2FF">
                 <blockquote class="blockquote mb-4">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-primary">
                         <thead>
                             <tr>
                                 <th scope="col" class="col-md-4">Branches</th>
@@ -293,9 +306,9 @@ if (isset($_SESSION['id']) && isset($_SESSION['username']) && $_SESSION['role'] 
             <div class="card-header" style="background-color: #4775d1; color: #fff;">
             <h4> Area 3  <a href="add-branch.php" class="btn btn-success" style="float: right" onclick="showAddBranchModal()"> <i class="fa-solid fa-location-dot"></i> Add Branch</a></h4> 
             </div>
-            <div class="card-body">
+            <div class="card-body" style="background-color: #CFE2FF">
                 <blockquote class="blockquote mb-4">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-primary">
                         <thead>
                             <tr>
                                 <th scope="col" class="col-md-4">Branches</th>
